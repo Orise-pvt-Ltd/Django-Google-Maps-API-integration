@@ -15,13 +15,21 @@ def route(request):
         "base_country": settings.BASE_COUNTRY}
     return render(request, f'{local_app_name}/route.html', context)
 
+def google_map_location(request):
+    point = {'lat':6.9841644, 'lon':79.8991384}
+    context = {
+        "google_api_key": settings.GOOGLE_API_KEY,
+        "base_country": settings.BASE_COUNTRY,
+        "point":point}
+    return render(request, f'{local_app_name}/google_maps_location.html', context)
+
 def google_map_route(request):
     point = {'lat':6.9841644, 'lon':79.8991384}
     context = {
         "google_api_key": settings.GOOGLE_API_KEY,
         "base_country": settings.BASE_COUNTRY,
         "point":point}
-    return render(request, f'{local_app_name}/google_maps.html', context)
+    return render(request, f'{local_app_name}/google_maps_route.html', context)
 
 '''
 Basic view for displaying a map 

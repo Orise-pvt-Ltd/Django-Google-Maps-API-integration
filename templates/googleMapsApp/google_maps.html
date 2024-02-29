@@ -20,18 +20,22 @@
   let map;
 
   function initMap() {
-      // Correctly interpolate latitude and longitude
-      const myLatLng = { lat: `{{ point.lat }}`, lng: `{{ point.lon }}` };
-      map = new google.maps.Map(document.getElementById("map"), {
-          center: myLatLng,
-          zoom: 8,
-      });
+    const myLatLng = {
+        lat: parseFloat("{{ point.lat }}"),
+        lng: parseFloat("{{ point.lon }}")
+    };
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: myLatLng,
+        zoom: 8,
+    });
 
-      new google.maps.Marker({
-          position: myLatLng,
-          map,
-          title: "Hello World!",
-      });
+    // Assuming AdvancedMarkerElement usage is similar to the deprecated Marker class
+    const marker = new google.maps.marker.AdvancedMarkerElement({
+        position: myLatLng,
+        map: map,
+        title: "Hello World!",
+    });
+
   }
 </script>
 {% endblock %}

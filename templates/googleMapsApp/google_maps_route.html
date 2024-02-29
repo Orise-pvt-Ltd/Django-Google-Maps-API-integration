@@ -29,10 +29,11 @@
             center: { lat: parseFloat("{{ center.lat }}"), lng: parseFloat("{{ center.lng }}") },
         });
 
-        const directionsService = new DirectionsService();
-        const directionsRenderer = new DirectionsRenderer({
+        const directionsService = new google.maps.DirectionsService();
+        const directionsRenderer = new google.maps.DirectionsRenderer({
             map: map,
         });
+
 
         const points = JSON.parse('{{ points|safe }}');
         

@@ -10,8 +10,8 @@
 
 {% block extra_js %}
 <script type="text/javascript">
-  var google_api_key = "{{google_api_key|safe}}";
-  var base_country = "{{base_country|safe}}";
+  var google_api_key = "{{ google_api_key|safe }}";
+  var base_country = "{{ base_country|safe }}";
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&callback=initMap&libraries=&v=weekly" async defer></script>
@@ -20,8 +20,8 @@
   let map;
 
   function initMap() {
-      // Use dynamic latitude and longitude from the Django context
-      const myLatLng = { lat: {{ lat }}, lng: {{ lon }} };
+      // Correctly interpolate latitude and longitude
+      const myLatLng = { lat: `{{ point.lat }}`, lng: `{{ point.lon }}` };
       map = new google.maps.Map(document.getElementById("map"), {
           center: myLatLng,
           zoom: 8,

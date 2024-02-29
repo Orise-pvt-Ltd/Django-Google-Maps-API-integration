@@ -26,7 +26,7 @@
 
         const map = new Map(document.getElementById("map"), {
             zoom: 8,
-            center: { lat: parseFloat("{{ center.lat }}"), lng: parseFloat("{{ center.lon }}") },
+            center: { lat: parseFloat("{{ center.lat }}"), lng: parseFloat("{{ center.lng }}") },
         });
 
         const directionsService = new DirectionsService();

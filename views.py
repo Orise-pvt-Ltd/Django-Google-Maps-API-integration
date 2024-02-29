@@ -24,11 +24,14 @@ def google_map_location(request):
     return render(request, f'{local_app_name}/google_maps_location.html', context)
 
 def google_map_route(request):
-    point = {'lat':6.9841644, 'lon':79.8991384}
+    points = [
+        {'lat': 6.9271, 'lng': 79.8612},  # Example coordinates
+        {'lat': 7.2906, 'lng': 80.6337},  # More coordinates
+    ]
     context = {
         "google_api_key": settings.GOOGLE_API_KEY,
         "base_country": settings.BASE_COUNTRY,
-        "point":point}
+        "point":points}
     return render(request, f'{local_app_name}/google_maps_route.html', context)
 
 '''

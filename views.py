@@ -19,7 +19,7 @@ def google_map_route(request):
     point = {'lat':6.9841644, 'lon':79.8991384}
     context = {
         "google_api_key": settings.GOOGLE_API_KEY,
-        "base_country": settings.BASE_COUNTRY
+        "base_country": settings.BASE_COUNTRY,
         "point":point}
     return render(request, f'{local_app_name}/google_maps.html', context)
 

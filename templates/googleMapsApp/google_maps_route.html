@@ -38,7 +38,7 @@
         });
 
 
-        const points = `{{ points | safe }}`;
+        const points = JSON.parse("{{ points | safe }}");
         //const points = JSON.parse(document.getElementById('points-data').textContent);
         console.log('points',points)
         if(points.length > 1) {

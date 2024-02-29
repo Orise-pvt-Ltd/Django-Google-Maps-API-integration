@@ -44,7 +44,7 @@ def map(request):
             long_d=long_d
         )
     else:
-        return redirect(reverse('Google-Maps-API:route'))
+        return redirect(reverse('googleMapsApp:route'))
 
     context = {
         "google_api_key": settings.GOOGLE_API_KEY,

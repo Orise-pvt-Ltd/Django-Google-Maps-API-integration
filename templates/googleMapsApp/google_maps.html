@@ -21,23 +21,23 @@
   
     // Async function to import the Maps library and initialize the map
     async function loadAndInitMap() {
-      const { Map, Marker } = await google.maps.importLibrary("maps");
+        const { Map, Marker } = await google.maps.importLibrary("maps");
+        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
   
-      const myLatLng = {
+        const myLatLng = {
         lat: parseFloat("{{ point.lat }}"), // Dynamic latitude
         lng: parseFloat("{{ point.lon }}") // Dynamic longitude
-      };
+        };
   
-      const map = new Map(document.getElementById("map"), {
+        const map = new Map(document.getElementById("map"), {
         center: myLatLng,
         zoom: 8,
-      });
+        });
   
-      new Marker({
-        position: myLatLng,
-        map,
-        title: 'Dynamic Location',
-      });
+        const marker = new AdvancedMarkerElement({
+            map,
+            position: myLatLng,
+        });
     }
   
     loadAndInitMap(); // Call the function to load the map and marker

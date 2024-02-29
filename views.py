@@ -25,8 +25,8 @@ def google_map_location(request):
 
 def google_map_route(request):
     points = [
-        {'lat': 6.9271, 'lng': 79.8612},  # Example coordinates
-        {'lat': 7.2906, 'lng': 80.6337},  # More coordinates
+        {"lat": 6.9271, "lng": 79.8612},  # Example coordinates
+        {"lat": 7.2906, "lng": 80.6337},  # More coordinates
     ]
     center = {'lat': 6.9271, 'lng': 79.8612}
 

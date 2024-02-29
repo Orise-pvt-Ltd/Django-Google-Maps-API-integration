@@ -9,6 +9,9 @@
 {% endblock %}
 
 {% block extra_js %}
+
+{{ points|json_script:"points-data" }}
+
 <script type="text/javascript">
   var google_api_key = "{{ google_api_key|safe }}";
 </script>
@@ -35,7 +38,8 @@
         });
 
 
-        const points = JSON.parse("{{ points }}");
+        //const points = JSON.parse("{{ points }}");
+        const points = JSON.parse(document.getElementById('points-data').textContent);
         
         if(points.length > 1) {
             const origin = points[0];

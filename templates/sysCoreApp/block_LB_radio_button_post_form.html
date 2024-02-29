@@ -1,0 +1,10 @@
+{% extends base_main_content_template %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block block_LB %}
+    <form method="post">
+        {% csrf_token %}
+        {% crispy form %}
+    </form>
+{% endblock %}

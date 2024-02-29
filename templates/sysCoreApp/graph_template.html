@@ -1,0 +1,14 @@
+{% extends base_main_content_template %}
+{% load static %}
+
+{% block main_content %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<!-- Graph container -->
+<div id="plotly_graph"></div>
+
+<script>
+    var graph_data = {{ graph | safe }};
+    Plotly.react('plotly_graph', graph_data.data, graph_data.layout);
+</script>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends base_main_content_template %}
+{% load static %}
+
+{% block main_content %}
+<!-- First row (full width) -->
+<div class="row text-center">
+    <div class="horizontal-center">
+        <h2>{{ title }}</h2>
+    </div>        
+</div>
+
+<!-- Div for Tabulator table -->
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div id="myDataTable2" class="p-3"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Download Button Container -->
+{% if data %}
+    <div class="container mt-3" id="download-csv-container" style="display: none;">
+        <button id="download-csv" class="btn btn-success">Download CSV</button>
+    </div>
+{% endif %}
+
+{% if test_str %}
+<div class="row">
+    <h3>Testing:</h3>
+    <p>{{ test_str|safe }}</p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var data = {{ data|safe }};
+        
+        var table = new Tabulator("#myDataTable2", {
+            data: data,
+            layout: "fitColumns",
+            placeholder: "No Data Available",
+            columns: generateColumns(data),
+        });
+
+        function generateColumns(dataArray) {
+            if (!dataArray.length) return [];
+            var keys = Object.keys(dataArray[0]);
+            return keys.map(function(key) {
+                return {
+                    title: key.charAt(0).toUpperCase() + key.slice(1),
+                    field: key,
+                    headerFilter: "input", // Enable header filtering
+                    sorter: true, // Enable sorting
+                };
+            });
+        }
+
+        // Make the download button visible
+        document.getElementById("download-csv-container").style.display = 'block';
+
+        // Flag to check if the event listener has been attached
+        var isDownloadListenerAttached = false;
+
+        // Attach event listener to the download button if not already attached
+        if (!isDownloadListenerAttached) {
+            document.getElementById("download-csv").addEventListener("click", function() {
+                table.download("csv", "data.csv");
+            });
+
+            // Update the flag
+            isDownloadListenerAttached = true;
+        }
+
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,102 @@
+<!-- navigation.html -->
+{% load custom_filters %}
+{% load static %}
+
+<!-- Navbar items -->
+<div class="d-flex flex-column nav-items-alignment">
+    <!-- Brand or Logo can go here -->
+    <div class="main-nav-title">
+        <div class="menu-title" style="width: 180px;">
+            <a href="#" class="nav-item">
+                ORISE
+            </a>
+        </div>    
+        <button id="menu-button" type="submit" class="menu-button">
+            <div id="menuIcon" class="menu-icon-animation menu-con">
+                <img src="{% static 'syscoreApp/images/menu_open.svg' %}" alt="menu">
+            </div>
+        </button>          
+    </div>
+
+    {% if user.is_authenticated %}
+    <span class="navbar-tex user-name">{{ user.first_name }}</span>
+    <a href="{% url 'home' %}" class="nav-item ajax-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+        <div id="home-link" class="menu-item  nav-link">
+            <div class="icon-padding nav-icon">
+                <img src="{% static 'syscoreApp/images/home.svg' %}" alt="home">
+            </div>
+            <div class="menu-title">
+                ORISE-Home
+            </div>
+        </div>
+    </a>
+
+    <a href="{% url 'app_model_list_view' app_label='modelsApp'%}" class="nav-item  ajax-link {% if request.resolver_match.url_name == 'app_model_list_view' %}active{% endif %}">
+        <div id="update-users" class="menu-item  nav-link">
+            <div class="icon-padding nav-icon">
+                <img src="{% static 'syscoreApp/images/dataset_linked.svg' %}" alt="data">
+            </div>
+            <div class="menu-title">
+                Manage data
+            </div>
+        </div>
+    </a>        
+    <a href="{% url 'custom_admin' %}" class="nav-item  {% if request.resolver_match.url_name == 'custom_admin' %}active{% endif %}">
+        <div id="administration" class="menu-item  nav-link">
+            <div class="icon-padding nav-icon">
+                <img src="{% static 'syscoreApp/images/admin_panel.svg' %}" alt="invoice">
+            </div>
+            <div class="menu-title">
+                Administration
+            </div>
+
+        </div>
+    </a>        
+        {% if user|has_group:"admin" %}
+            <a href="{% url 'callapi' %}" class="nav-item ajax-link {% if request.resolver_match.url_name == 'callapi' %}active{% endif %}">
+                <div id="api" class="menu-item  nav-link">
+                    <div class="icon-padding nav-icon">
+                        <img src="{% static 'syscoreApp/images/api.svg' %}" alt="invoice">
+                    </div>
+                    <div class="menu-title">
+                        API
+                    </div>
+    
+                </div>
+            </a>
+            <a href="{% url 'server_health' %}" class="nav-item ajax-link {% if request.resolver_match.url_name == 'server_health' %}active{% endif %}">
+                <div id="api" class="menu-item  nav-link">
+                    <div class="icon-padding nav-icon">
+                        <img src="{% static 'syscoreApp/images/server.svg' %}" alt="server">
+                    </div>
+                    <div class="menu-title">
+                        Server health
+                    </div>
+    
+                </div>
+            </a>                
+        {% endif %}
+        <a href="{% url 'app_logout' %}" class="nav-item {% if request.resolver_match.url_name == 'app_logout' %}active{% endif %}">
+            <div id="logout" class="menu-item  nav-link">
+                <div class="icon-padding nav-icon">
+                    <img src="{% static 'syscoreApp/images/logout.svg' %}" alt="logout">
+                </div>
+                <div class="menu-title">
+                    Logout
+                </div>
+
+            </div>
+        </a>
+        <a href="{% url 'admin:login' %}" class="nav-item {% if request.resolver_match.url_name == 'admin:login' %}active{% endif %}">
+            <div id="login" class="menu-item  nav-link">
+                <div class="icon-padding nav-icon">
+                    <img src="{% static 'syscoreApp/images/login.svg' %}" alt="invoice">
+                </div>
+                <div class="menu-title">
+                    Login
+                </div>
+
+            </div>
+        </a>
+    {% endif %}    
+</div>

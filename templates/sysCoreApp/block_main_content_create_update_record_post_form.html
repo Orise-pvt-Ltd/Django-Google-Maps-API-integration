@@ -1,0 +1,29 @@
+{% extends base_main_content_template %}
+{% load static %}
+{% load custom_filters %}
+{% load crispy_forms_tags %}
+
+{% block main_content %}
+<div class="row">
+    {% if form %}
+        <h4>{{ title }}</h4>
+        <form method="post" action="{% url 'update_model_record' model_name=model_name record=record%}">
+            {% csrf_token %}
+            {% if is_confirmation %}
+                <!-- Render form fields as non-editable -->
+                {% for field in form %}
+                    <p><strong>{{ field.label }}:</strong> {{ form_data|get_item:field.name }}</p>
+                {% endfor %}
+                <input type="hidden" name="confirmation" value="true">
+                <input type="submit" value="Confirm">
+            {% else %}
+                {% crispy form %}
+            {% endif %}
+        </form>
+    {% else %}
+        <div>
+            <h4>{{ title }}</h44>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

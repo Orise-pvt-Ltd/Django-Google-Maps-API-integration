@@ -1,0 +1,25 @@
+{% extends base_main_content_template %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block block_LB %}
+    <form method="post">
+        {% csrf_token %}
+        {% crispy form %}
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const allDropdowns = document.querySelectorAll('form select');  // Target all select dropdowns inside forms
+
+            allDropdowns.forEach(dropdown => {
+                dropdown.addEventListener('change', function() {
+                    // Only submit the form if the selected option isn't the default blank choice
+                    if(this.value) {
+                        this.closest('form').submit();  // Submit the form containing the changed dropdown
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

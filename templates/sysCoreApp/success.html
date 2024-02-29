@@ -1,0 +1,12 @@
+{% extends base_main_content_template %}
+
+{% block main_content %}
+<div class="alert alert-success">
+    <h2>Success</h2>
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% empty %}
+        <p>Action executed successfully.</p>
+    {% endfor %}
+</div>
+{% endblock %}

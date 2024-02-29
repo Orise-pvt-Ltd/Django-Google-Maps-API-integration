@@ -1,0 +1,65 @@
+{% extends base_main_content_template %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block main_content %}
+<div class="row text-center">
+    <div class="horizontal-center">
+        <h2>{{ title }}</h2>
+    </div>        
+</div>
+
+<form method="post" id="roleAssignmentForm">
+    {% csrf_token %}
+    <div id="role-table"></div>
+    <input type="hidden" name="roleData" id="roleDataInput">
+    <button type="submit" class="btn btn-primary">Assign Roles</button>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tabledata = {{ table_data|safe }};
+        var roles = {{ roles|safe }};
+        var contexts = JSON.parse('{{ contexts|safe }}');
+
+        // Create a mapping of role IDs to names for the formatter
+        var roleMap = roles.reduce(function(map, role) {
+            map[role.id] = role.name;
+            return map;
+        }, {});
+
+        // Custom formatter for role fields
+        function roleFormatter(cell, formatterParams, onRendered) {
+            return roleMap[cell.getValue()] || "";
+        }
+
+        // Define columns based on contexts
+        var columns = [{title: "User", field: "user", headerSort: false}];
+        contexts.forEach(function(context) {
+            columns.push({
+                title: context.name,
+                field: context.name,
+                editor: "select",
+                editorParams: { values: roleMap },
+                formatter: roleFormatter
+            });
+        });
+
+        // Initialize Tabulator
+        var table = new Tabulator("#role-table", {
+            data: tabledata,
+            columns: columns,
+            layout: "fitColumns",
+        });
+
+        // Form submission logic
+        document.getElementById('roleAssignmentForm').onsubmit = function() {
+            var roleData = table.getData();
+            document.getElementById('roleDataInput').value = JSON.stringify(roleData);
+        };
+    });
+</script>
+{% endblock %}
+

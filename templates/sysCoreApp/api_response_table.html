@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main_content %}
+<h1>{{title}}</h1>
+<table id="myDataTable" border="1">
+    <!-- Table header -->
+    <thead>
+        <tr>
+            {% if data %}
+                {% for key in data.0.keys %}  <!-- Assuming all dictionaries have the same keys -->
+                    <th>{{ key }}</th>
+                {% endfor %}
+            {% endif %}
+        </tr>
+    </thead>
+    <!-- Table body -->
+    <tbody>
+        {% for item in data %}
+            <tr>
+                {% for key, value in item.items %}
+                    <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    $(document).ready( function () {
+        $('#myDataTable').DataTable();
+    });
+</script>
+{% endblock %}
+

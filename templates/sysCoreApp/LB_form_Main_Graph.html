@@ -1,0 +1,51 @@
+{% extends base_main_content_template %}
+
+{% load static %}
+
+{% block additional_styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'modelsApp/css/styles.css' %}">
+{% endblock %}
+
+{% block main_content %}
+    <!-- First row (full width) -->
+    <div class="row">
+        <div class="horizontal-center">
+            <h2>Grade Distribution {{title}}</h2>
+        </div>        
+    </div>
+
+    <!-- Second row -->
+    <div class="row">
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+        <!-- Graph container -->
+        <div id="plotly_graph1"></div>
+        
+        <script>
+            var graph1_data = {{ graph1 | safe }};
+            Plotly.react('plotly_graph1', graph1_data.data, graph1_data.layout);
+        </script>
+    </div>
+
+    <!-- Second row -->
+    <div class="row">
+        <!-- Graph container -->
+        <div id="plotly_graph2"></div>        
+        <script>
+            var graph2_data = {{ graph2 | safe }};
+            Plotly.react('plotly_graph2', graph2_data.data, graph2_data.layout);
+        </script>
+
+    </div>
+   
+{% endblock %}
+
+
+
+{% block block_LB %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form_LB.as_p }}
+        <!-- Removed the submit button since the form now auto-submits on dropdown change -->
+    </form>
+{% endblock %}

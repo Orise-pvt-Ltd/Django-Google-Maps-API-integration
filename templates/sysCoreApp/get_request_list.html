@@ -1,0 +1,21 @@
+{% extends base_main_content_template %}
+{% load static %}
+
+{% block block_LB %}
+    <h4>{{title}}</h4>
+    <ul>
+    {% for item in items %}
+        <!-- Set a JavaScript function to change the iframe's src -->
+        <a href="{% url type item.value %}" class="btn btn-primary">{{ item.label }}</a>
+    {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block main_content %}
+<div class="iframe-container">
+    <iframe src="{{ iframe_src|default:default_src }}" style="width:100%; height:500px;"></iframe>
+</div>
+{% endblock %}
+
+
+

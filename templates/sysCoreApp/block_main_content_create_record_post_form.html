@@ -1,0 +1,72 @@
+{% extends base_main_content_template %}
+{% load static %}
+{% load custom_filters %}
+{% load crispy_forms_tags %}
+
+{% block main_content %}
+<div class="row">
+    {% if form %}
+        <h4>{{ title }}</h4>
+        <form id="myForm" method="post" action="{% url post_url_name app_label=app_label model_name=model_name%}">
+            {% csrf_token %}
+            {% crispy form %}
+        </form>
+        <br>
+        <!-- Placeholder for Tabulator Table -->
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div id="confirmTable" style="display:none;" class="p-3"></div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <!-- Confirm Button -->
+        <button id="confirmButton" class="btn btn-primary" style="display:none;" onclick="confirmSubmit()">Confirm</button>
+        
+        
+    {% else %}
+        <div>
+            <h4>{{ title }}</h44>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Intercept form submission
+    document.getElementById('myForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Extract form data and display in Tabulator
+        var formData = new FormData(this);
+        var tableData = [];
+        formData.forEach(function(value, key) {
+            if (key !== 'csrfmiddlewaretoken') {  // Exclude csrfmiddlewaretoken fields
+                tableData.push({field: key, value: value});
+            }
+        });
+
+        var table = new Tabulator("#confirmTable", {
+            data: tableData,
+            autoColumns: true,
+            layout: "fitDataStretch", // Use this layout mode
+        });
+    
+        // Show the table and confirm button
+        document.getElementById('confirmTable').style.display = 'block';
+        document.getElementById('confirmButton').style.display = 'block';
+    });
+    
+    // Confirm submission function
+    function confirmSubmit() {
+        var form = document.getElementById('myForm');
+        if (form) {
+            form.submit();
+        } else {
+            console.error("Form not found");
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends base_main_content_template %}
+{% load static %}
+
+{% block main_content %}
+<div class="iframe-container">
+    <!-- Add an ID to the iframe -->
+    <iframe id="main-iframe" src="{{ iframe_src|default:default_src }}"></iframe>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}

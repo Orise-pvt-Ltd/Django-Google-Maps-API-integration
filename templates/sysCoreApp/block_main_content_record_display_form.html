@@ -1,0 +1,15 @@
+{% extends base_main_content_template %}
+{% load static %}
+{% load custom_filters %}
+
+{% block main_content %}
+<div class="row">
+    <h4>{{ title }}</h4>
+    {% csrf_token %}
+    <!-- Display form fields as text -->
+    {% for field in form %}
+        <div>
+            <strong>{{ field.label }}:</strong> {{ form_data|get_item:field.name }}
+        </div>
+    {% endfor %}
+{% endblock %}

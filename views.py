@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.conf import settings
+from .utilities.app_variables import local_app_name
 
 from .mixins import Directions
 
@@ -12,7 +13,7 @@ def route(request):
     context = {
         "google_api_key": settings.GOOGLE_API_KEY,
         "base_country": settings.BASE_COUNTRY}
-    return render(request, 'apiapp/route.html', context)
+    return render(request, f'{local_app_name}/route.html', context)
 
 
 '''
@@ -43,7 +44,7 @@ def map(request):
             long_d=long_d
         )
     else:
-        return redirect(reverse('apiapp:route'))
+        return redirect(reverse('Google-Maps-API:route'))
 
     context = {
         "google_api_key": settings.GOOGLE_API_KEY,
@@ -61,4 +62,4 @@ def map(request):
         "directions": directions,
 
     }
-    return render(request, 'apiapp/map.html', context)
+    return render(request, f'{local_app_name}/map.html', context)

@@ -29,10 +29,11 @@ def google_map_route(request):
         {'lat': 7.2906, 'lng': 80.6337},  # More coordinates
     ]
     center = {'lat': 6.9271, 'lng': 79.8612}
-    
+
     context = {
         "google_api_key": settings.GOOGLE_API_KEY,
         "base_country": settings.BASE_COUNTRY,
+        "center":center,
         "point":points}
     return render(request, f'{local_app_name}/google_maps_route.html', context)
 

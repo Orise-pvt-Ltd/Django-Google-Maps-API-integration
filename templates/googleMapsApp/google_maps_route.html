@@ -40,7 +40,7 @@
 
         //const points = JSON.parse("{{ points }}");
         const points = JSON.parse(document.getElementById('points-data').textContent);
-        
+        console.log('points',points)
         if(points.length > 1) {
             const origin = points[0];
             const destination = points[points.length - 1];

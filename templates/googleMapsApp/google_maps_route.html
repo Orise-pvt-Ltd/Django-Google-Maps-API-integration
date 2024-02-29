@@ -20,28 +20,53 @@
     });
   
     // Async function to import the Maps library and initialize the map
+
     async function loadAndInitMap() {
-        const { Map, Marker } = await google.maps.importLibrary("maps");
-        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-  
-        const myLatLng = {
-        lat: parseFloat("{{ point.lat }}"), // Dynamic latitude
-        lng: parseFloat("{{ point.lon }}") // Dynamic longitude
-        };
-  
+        const { Map } = await google.maps.importLibrary("maps");
+        const { DirectionsService, DirectionsRenderer } = await google.maps.importLibrary("directions");
+
         const map = new Map(document.getElementById("map"), {
-        center: myLatLng,
-        zoom: 8,
-        mapId: "4504f5b37265c3d0",
+            zoom: 7,
+            center: { lat: parseFloat("{{ points.0.lat }}"), lng: parseFloat("{{ points.0.lng }}") }, // Center map on the first point
         });
-  
-        const marker = new AdvancedMarkerElement({
-            map,
-            position: myLatLng,
+
+        const directionsService = new DirectionsService();
+        const directionsRenderer = new DirectionsRenderer({
+            map: map,
+        });
+
+        calculateAndDisplayRoute(directionsService, directionsRenderer);
+    }
+
+    async function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+        const waypts = [];
+        const points = JSON.parse('{{ points|safe }}'); // Assuming 'points' is passed as JSON
+
+        for (let i = 1; i < points.length - 1; i++) {
+            waypts.push({
+                location: new google.maps.LatLng(points[i].lat, points[i].lng),
+                stopover: true,
+            });
+        }
+
+        directionsService.route({
+            origin: new google.maps.LatLng(points[0].lat, points[0].lng),
+            destination: new google.maps.LatLng(points[points.length - 1].lat, points[points.length - 1].lng),
+            waypoints: waypts,
+            optimizeWaypoints: true,
+            travelMode: google.maps.TravelMode.DRIVING,
+        },
+        (response, status) => {
+            if (status === "OK") {
+                directionsRenderer.setDirections(response);
+            } else {
+                window.alert("Directions request failed due to " + status);
+            }
         });
     }
-  
-    loadAndInitMap(); // Call the function to load the map and marker
+
+    loadAndInitMap(); // Call the function to load the map and route
+
   </script>
   
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.apps import AppConfig
+from .utilities.app_variables import local_app_name
 
-
-class ApiappConfig(AppConfig):
+class GoogleApiAppConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apiapp'
+    name = local_app_name

@@ -34,7 +34,7 @@ def google_map_route(request):
         "google_api_key": settings.GOOGLE_API_KEY,
         "base_country": settings.BASE_COUNTRY,
         "center":center,
-        "point":points}
+        "points":points}
     return render(request, f'{local_app_name}/google_maps_route.html', context)
 
 '''

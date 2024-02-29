@@ -1,0 +1,148 @@
+{% extends base_main_content_template %}
+{% load static %}
+
+
+
+{% block main_content %}
+<div class="main-content">
+  <h3 id="map">Django Google API Course - Map</h3>
+
+  <div class="container">
+
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Start</td>
+          <td>{{directions.origin}}</td>      
+        </tr>
+        <tr>
+          <td>Destination</td>
+          <td>{{directions.destination}}</td>      
+        </tr>
+        <tr>
+          <td>Duration</td>
+          <td>{{directions.duration}}</td>      
+        </tr>
+        <tr>
+          <td>Distance</td>
+          <td>{{directions.distance}}</td>      
+        </tr>
+        <tr>
+          <td>Directions</td>
+          <td id="dir-toggle">click <a href="javascript:void(0)" onclick="DirectionsToggle()">here</a></td>      
+        </tr>
+
+      </tbody>
+    </table>
+
+    <table id="dir-table" hidden>
+      <thead>
+        <tr>
+          <th>Directions</th>
+          <th>Distance</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for leg in directions.route %}
+            <tr>
+            <td>Leg {{ forloop.counter }}</td>
+            <td></td>
+            <td></td>  
+          </tr>
+          {% for dist, dur, text in leg.steps %}
+          <tr>
+            <td>{{text|safe}}</td>
+            <td>{{dist}}</td>
+            <td>{{dur}}</td>   
+          </tr>
+          {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+
+  <div class="map-container">
+
+    <div id="map-route"></div>
+
+
+  </div>
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+  <script type="text/javascript">
+
+    var google_api_key = "{{google_api_key|safe}}";
+    var lat_a = {{lat_a|safe}};
+    var long_a = {{long_a|safe}};
+    var lat_b = {{lat_b|safe}};
+    var long_b = {{long_b|safe}};
+    var lat_c = {{lat_c|safe}};
+    var long_c = {{long_c|safe}};
+    var lat_d = {{lat_d|safe}};
+    var long_d = {{long_d|safe}};
+    var origin = "{{origin|safe}}";
+    var destination = "{{destination|safe}}";
+    var directions = {{directions|safe}}
+
+  </script>
+
+  <script>
+    $.getScript( "https://maps.googleapis.com/maps/api/js?key=" + google_api_key + "&libraries=places") 
+    .done(function( script, textStatus ) {
+        google.maps.event.addDomListener(window, "load", initMap)
+
+    })
+
+
+    function initMap() {
+        var directionsService = new google.maps.DirectionsService;
+        var directionsDisplay = new google.maps.DirectionsRenderer;
+        var map = new google.maps.Map(document.getElementById('map-route'), {
+            zoom: 7,
+            center: {lat: lat_a, lng: long_a}
+        });
+        directionsDisplay.setMap(map);
+        calculateAndDisplayRoute(directionsService, directionsDisplay);
+
+    }
+
+    const waypts = [
+            {location: {lat: lat_c, lng: long_c},
+            stopover: true},
+            {location: {lat: lat_d, lng: long_d},
+            stopover: true}
+            ];
+
+    function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+        directionsService.route({
+            origin: origin,
+            destination: destination,
+            waypoints: waypts,
+            optimizeWaypoints: true,
+            travelMode: google.maps.TravelMode.DRIVING,
+        }, function(response, status) {
+          if (status === 'OK') {
+            directionsDisplay.setDirections(response);
+
+
+          } else {
+
+            alert('Directions request failed due to ' + status);
+            window.location.assign("/route")
+          }
+        });
+    }
+  </script>
+
+{% endblock %}

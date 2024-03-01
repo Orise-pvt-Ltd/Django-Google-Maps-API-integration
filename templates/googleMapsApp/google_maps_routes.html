@@ -1,0 +1,73 @@
+{% extends base_main_content_template %}
+{% load static %}
+
+{% block main_content %}
+<div class="main-content">
+  <h3>Django Google API Course - Routing</h3>
+  <div id="map" style="height: 400px; width: 100%;"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+
+{{ points|json_script:"points-data" }}
+
+<script type="text/javascript">
+  var google_api_key = "{{ google_api_key|safe }}";
+</script>
+
+<script>
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+      key: "{{ google_api_key }}",
+      v: "weekly",
+    });
+  
+    // Async function to import the Maps library and initialize the map
+
+    async function loadAndInitMap() {
+        const { Map, DirectionsService, DirectionsRenderer } = await google.maps.importLibrary("maps");
+
+        const map = new Map(document.getElementById("map"), {
+            zoom: 8,
+            center: { lat: parseFloat("{{ center.lat }}"), lng: parseFloat("{{ center.lng }}") },
+        });
+
+        const directionsService = new google.maps.DirectionsService();
+        const directionsRenderer = new google.maps.DirectionsRenderer({
+            map: map,
+        });
+
+
+        //const points = JSON.parse("{{ points | safe}}");
+        const points = JSON.parse(document.getElementById('points-data').textContent);
+        console.log('points',points)
+        if(points.length > 1) {
+            const origin = points[0];
+            const destination = points[points.length - 1];
+            const waypoints = points.slice(1, -1).map(point => ({
+                location: { lat: point.lat, lng: point.lng },
+                stopover: true,
+            }));
+
+            directionsService.route({
+                origin: origin,
+                destination: destination,
+                waypoints: waypoints,
+                travelMode: google.maps.TravelMode.DRIVING,
+            }, (response, status) => {
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(response);
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
+        }
+    }
+
+    loadAndInitMap();
+
+
+  </script>
+  
+{% endblock %}
+
